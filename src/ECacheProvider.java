@@ -174,4 +174,12 @@ public class ECacheProvider {
 		return new URL(restResource + "/" + mapName + "/" + URLEncoder.encode(key,"UTF-8"));
 	}
 	
+	/**
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		System.out.println("This is just a test");
+	}
+	
 }
