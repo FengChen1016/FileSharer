@@ -2,7 +2,7 @@ package com.filesharer.common.configuration;
 
 public interface IConfiguration {
 	
-	public void load(String configKey);
+	public void load();
 	
 	public String getStringValue(String key);
 	public String getStringValue(String key,String defaultValue);
