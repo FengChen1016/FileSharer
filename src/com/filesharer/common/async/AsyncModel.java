@@ -21,6 +21,8 @@ public class AsyncModel {
 		});
 	}
 	
-	
+	public void submit(AsyncTask task) {
+		
+	}
 
 }
