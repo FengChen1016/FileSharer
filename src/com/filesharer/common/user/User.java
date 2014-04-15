@@ -28,6 +28,19 @@ public class User {
 		return current.get();
 	}
 	
+	public void logout() {
+		current.set(unauthenticatedUser);
+	}
 	
+	public String getUserName() {
+		return name;
+	}
 	
+	public String getIP() {
+		return ip;
+	}
+	
+	public boolean isAuthenticated() {
+		return current.get() != unauthenticatedUser;
+	}
 }
