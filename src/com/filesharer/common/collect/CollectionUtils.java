@@ -12,7 +12,6 @@ import com.filesharer.common.core.Predicate;
 public class CollectionUtils {
 	
 	public static <T> Collection<T> union(Collection<T> c1, Collection<T> c2) {
-		
 		if (c1 == null && c2 == null) {
 			return Collections.emptyList();
 		} else if (c1 == null) {
