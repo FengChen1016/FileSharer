@@ -15,6 +15,7 @@ public class FileResourceServiceEndpoint {
 	@Path("/list")
 	@GET
 	public List<FileMetaData> getFileResourceList(@FormParam("upload") InputStream in) {
-		
+		// TODO
+		return null;
 	}
 }

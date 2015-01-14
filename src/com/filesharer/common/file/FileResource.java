@@ -12,7 +12,7 @@ import com.filesharer.common.ResourceNotFoundException;
 public class FileResource implements Resource {
 	private final String key;
 	private File source;
-	//private FileMetaData metadata;
+	private FileMetaData metadata;
 	
 	public FileResource(String key) {
 		this.key = key;
@@ -25,8 +25,7 @@ public class FileResource implements Resource {
 	}
 	
 	public FileMetaData getMetaData() {
-		// TODO get metadata
-		return metaData;
+		return metadata;
 	}
 	
 	@Override
