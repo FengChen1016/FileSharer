@@ -1,20 +1,22 @@
 package com.filesharer.common.monitor;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class Monitor implements Runnable {
-	private static final long ONE_SECOND = 1000;
+	private static final long DEFAULT_INTERVAL = 10000;  // ten seconds
 	private final long interval;
-	private AtomicBoolean running = new AtomicBoolean(false);
+	private volatile boolean running = false;
+	private Thread monitorThread = null;
 	
-	private final List<Observer> observers = Collections.synchronizedList(new ArrayList<Observer>());;
+	// private final List<Observer> observers = Collections.synchronizedList(new ArrayList<Observer>());
+	// use CopyOnWriteArrayList for concurrent modification. 
+	// reference apache.commons.io.monitor.FileAlterationMonitor
+	private final List<Observer> observers = new CopyOnWriteArrayList<>();
 	
 	public Monitor() {
-		interval = ONE_SECOND;
+		interval = DEFAULT_INTERVAL;
 	}
 	
 	public Monitor(long interval) {
@@ -41,23 +43,52 @@ public class Monitor implements Runnable {
 	}
 	
 	public void start() {
-		if (!running.compareAndSet(false, true)) {
+		if (running) {
 			System.out.println("Monior had already been started.");
 			return;
-		} else {
-			System.out.println("Monior started...");
 		}
+		running = true;
+		System.out.println("starting monitor...");
+		monitorThread = new Thread(this);
+		monitorThread.start();
+		System.out.println("monitor started...");
+	}
+	
+	public void stop() {
+		stop(interval);
+	}
+	
+	public void stop(long stopInterval) {
+		if (!running) {
+			System.out.println("Monior is not running.");
+			return;
+		}
+		running = false;
+		try {
+			System.out.println("Stopping monitor...");
+            monitorThread.join(stopInterval);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+		System.out.println("Monitor stopped.");
 	}
 
 	@Override
 	public void run() {
-		while (running.get()) {
+		while (running) {
 			for (Observer ob : observers) {
 				try {
 					ob.checkAndNotify();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
+			if (!running) {
+				break;
+			}
+			try {
+				Thread.sleep(interval);
+			} catch (InterruptedException ignore) {
 			}
 		}
 	}
