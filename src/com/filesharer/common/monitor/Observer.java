@@ -1,19 +1,26 @@
 package com.filesharer.common.monitor;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public abstract class Observer {
+public class Observer {
 	
-	private final List<Listener> listeners = Collections.synchronizedList(new ArrayList<Listener>());
+	private final List<Listener> listeners = new CopyOnWriteArrayList<>();
 	
-	private final Subject subject;
+	protected final Subject subject;
+	
+	protected State state = null;
 	
 	public Observer(Subject subject) {
 		this.subject = subject;
+		initState();
 	}
 	
+	protected void initState() {
+		state = subject.exists() ? subject.state() : null;
+	}
+
 	protected void checkAndNotify() {
 		String event = checkChangeEvent();
 		if (!event.equals(ChangeEvent.NO_CHANGE)) {
@@ -25,12 +32,29 @@ public abstract class Observer {
 	}
 	
 	/**
-	 * To be implemented by subclass.
+	 * To be override by subclass.
 	 * Check state of subject according to specific business logic
 	 * @return change event string
 	 */
-	protected abstract String checkChangeEvent();
+	protected String checkChangeEvent() {
+		if (state == null) {
+			if (subject.exists()) {
+				state = subject.state();
+				return ChangeEvent.CREATE;
+			}
+		} else {
+			if (!subject.exists()) {
+				state = null;
+				return ChangeEvent.DELETE;
+			}
+			if (state.compareTo(subject.state()) != 0) {
+				return ChangeEvent.CHANGE;
+			}
+		}
+		return ChangeEvent.NO_CHANGE;
+	}
 
+	
 	public void addListener(Listener listener) {
 		listeners.add(listener);
 	}

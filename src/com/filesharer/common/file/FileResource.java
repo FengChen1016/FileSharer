@@ -30,7 +30,7 @@ public class FileResource implements Resource {
 	
 	@Override
 	public InputStream open() {
-		if (!isValid()) {
+		if (!exists()) {
 			throw new ResourceNotFoundException(key);
 		}
 		try {
@@ -41,9 +41,13 @@ public class FileResource implements Resource {
 	}
 
 	@Override
-	public boolean isValid() {
-		return source.exists() && source.isFile();
+	public boolean exists() {
+		return source.exists();
 	}
 
+	@Override
+	public long lastModified() {
+		return source.lastModified();
+	}
 	
 }

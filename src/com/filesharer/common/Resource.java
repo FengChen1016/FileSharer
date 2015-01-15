@@ -8,5 +8,7 @@ public interface Resource {
 	
 	public InputStream open();
 	
-	public boolean isValid();
+	public boolean exists();
+	
+	public long lastModified();
 }

@@ -8,9 +8,9 @@ public interface Subject {
 	 */
 	boolean exists();
 	/**
-	 * Query subject's current state 
-	 * @return Object stand for subject's current state
+	 * Check subject's current state 
+	 * @return state of subject
 	 */
-	Object state();
+	State state();
 	
 }
