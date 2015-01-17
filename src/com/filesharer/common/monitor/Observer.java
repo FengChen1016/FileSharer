@@ -48,6 +48,7 @@ public class Observer {
 				return ChangeEvent.DELETE;
 			}
 			if (state.compareTo(subject.state()) != 0) {
+				state = subject.state();
 				return ChangeEvent.CHANGE;
 			}
 		}

@@ -11,7 +11,7 @@ public class FileSubject extends FileResource implements Subject {
 
 	@Override
 	public FileState state() {
-		return new FileState();
+		return new FileState(this.lastModified());
 	}
 
 }
