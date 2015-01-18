@@ -11,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.wink.common.model.multipart.BufferedInMultiPart;
 import org.apache.wink.common.model.multipart.InMultiPart;
 import org.apache.wink.common.model.multipart.InPart;
 
@@ -30,11 +29,14 @@ public class FileResourceServiceEndpoint {
 	@POST
 	@Path("/files/{name}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public String upload(@PathParam("id") String fileName, InMultiPart imp) {
+	public String upload(@PathParam("name") String fileName, InMultiPart imp) {
 		while (imp.hasNext()) {
 			InPart part = imp.next();
 			try {
+				/*MultivaluedMap<String, String> heades = part.getHeaders();
+		        String filename = heades.getFirst("filename");*/
 				InputStream is = part.getBody(InputStream.class, null);
+				// TODO write file
 			} catch (IOException e) {
 				e.printStackTrace();
 				return "Error";
