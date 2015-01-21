@@ -4,19 +4,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class PropConfiguration implements IConfiguration {
 	
-	private String path;
-	private Map<String, String> props = new HashMap<String, String>();
+	private final String path;
+	private Map<String, String> props = new ConcurrentHashMap<String, String>();
 
 	public PropConfiguration(String path) {
 		this.path = path;
+	}
+	
+	String getPath() {
+		return path;
 	}
 	
 	/**
@@ -42,6 +46,11 @@ public class PropConfiguration implements IConfiguration {
 		} catch (IOException e) {
 			throw new ConfigurationException("IOException occured in loading properties.", e);
 		}
+	}
+	
+	public void reload() {
+		props.clear();
+		load();
 	}
 
 	@Override

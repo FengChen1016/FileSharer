@@ -5,7 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class Monitor implements Runnable {
-	private static final long DEFAULT_INTERVAL = 10000;  // ten seconds
+	private static final long DEFAULT_INTERVAL = 10 * 1000;  // ten seconds
 	private final long interval;
 	private volatile boolean running = false;
 	private Thread monitorThread = null;
