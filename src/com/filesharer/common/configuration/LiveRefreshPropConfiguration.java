@@ -1,8 +1,8 @@
 package com.filesharer.common.configuration;
 
+import com.filesharer.common.monitor.Listener;
 import com.filesharer.common.monitor.Monitor;
 import com.filesharer.common.monitor.Observer;
-import com.filesharer.common.monitor.State;
 import com.filesharer.common.monitor.Subject;
 import com.filesharer.common.monitor.filemonitor.FileSubject;
 
@@ -36,7 +36,22 @@ public class LiveRefreshPropConfiguration implements IConfiguration {
 	
 	private void initMonitor() {
 		Subject subject = new FileSubject(propConfig.getPath());
-		monitor.addObserver(new Observer(subject));
+		Observer observer = new Observer(subject);
+		observer.addListener(new Listener() {
+			@Override
+			public void onChange(Subject subject, String changeEvent) {
+				reload();  // just reload configuration
+			}
+		});
+		monitor.addObserver(observer);
+	}
+	
+	public void start() {
+		monitor.start();
+	}
+	
+	public void stop() {
+		monitor.stop();
 	}
 	
 	public void reload() {
