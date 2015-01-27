@@ -2,12 +2,13 @@ package com.filesharer.common.monitor;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class Monitor implements Runnable {
 	private static final long DEFAULT_INTERVAL = 10 * 1000;  // ten seconds
 	private final long interval;
-	private volatile boolean running = false;
+	private AtomicBoolean running = new AtomicBoolean(false);
 	private Thread monitorThread = null;
 	
 	// private final List<Observer> observers = Collections.synchronizedList(new ArrayList<Observer>());
@@ -43,11 +44,15 @@ public class Monitor implements Runnable {
 	}
 	
 	public void start() {
-		if (running) {
+		/*if (running) {
 			System.out.println("Monior had already been started.");
 			return;
 		}
-		running = true;
+		running = true;*/
+		if (!running.compareAndSet(false, true)) {  // should be atomic for thread safe
+			System.out.println("Monior had already been started.");
+			return;
+		}
 		System.out.println("starting monitor...");
 		monitorThread = new Thread(this);
 		monitorThread.start();
@@ -59,11 +64,15 @@ public class Monitor implements Runnable {
 	}
 	
 	public void stop(long stopInterval) {
-		if (!running) {
+		/*if (!running) {
 			System.out.println("Monior is not running.");
 			return;
 		}
-		running = false;
+		running = false;*/
+		if (!running.compareAndSet(true, false)) {  // should be atomic for thread safe
+			System.out.println("Monior is not running.");
+			return;
+		}
 		try {
 			System.out.println("Stopping monitor...");
             monitorThread.join(stopInterval);
@@ -75,7 +84,7 @@ public class Monitor implements Runnable {
 
 	@Override
 	public void run() {
-		while (running) {
+		while (running.get()) {
 			for (Observer ob : observers) {
 				try {
 					ob.checkAndNotify();
@@ -83,7 +92,7 @@ public class Monitor implements Runnable {
 					e.printStackTrace();
 				}
 			}
-			if (!running) {
+			if (!(running.get())) {
 				break;
 			}
 			try {
