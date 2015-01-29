@@ -10,6 +10,7 @@ echo "$0 $$ Start network checking..."
 address=www.baiduc.com
 reportFile=report.txt
 touch $reportFile  # make sure this file exist
+# cat /dev/null > $reportFile
 maxSize=`expr 1024 \* 1024`  # 1 Mb
 duration=3600  # 1 hour
 total=1
@@ -18,8 +19,8 @@ num=1
 ### execute ###
 while true
 do
-	result=`ping -c 1 ${address}`
 	total=`expr ${total} + 1`
+	result=`ping -c 1 ${address}`
 	returnCode=$?
 	# if [[ $string == *"some string"* ]]
 	if [[ ${returnCode} -ne 0 ]] 
@@ -35,7 +36,7 @@ do
 	#Get file size in bytes
 	reportSize=`stat -c%s $reportFile`
 	# break if runing for specified time or log file size > maxSize
-	if (( `expr $t0 + $duration` > $t1 )) || (( $reportSize > $maxSize ))
+	if (( `expr $t0 + $duration` < $t1 )) || (( $reportSize > $maxSize ))
     then
         break
     fi
