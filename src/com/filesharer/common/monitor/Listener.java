@@ -6,6 +6,6 @@ public interface Listener {
 	 * @param subject subject that is observed
 	 * @param changeEvent
 	 */
-	void onChange(Subject subject, String changeEvent);
+	void onChange(Subject subject, ChangeEvent changeEvent);
 	
 }

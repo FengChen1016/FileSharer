@@ -22,7 +22,7 @@ public class Observer {
 	}
 
 	protected void checkAndNotify() {
-		String event = checkChangeEvent();
+		ChangeEvent event = checkChangeEvent();
 		if (!event.equals(ChangeEvent.NO_CHANGE)) {
 			// notify all listener
 			for (Listener listener : listeners) {
@@ -34,9 +34,9 @@ public class Observer {
 	/**
 	 * To be override by subclass.
 	 * Check state of subject according to specific business logic
-	 * @return change event string
+	 * @return change event
 	 */
-	protected String checkChangeEvent() {
+	protected ChangeEvent checkChangeEvent() {
 		if (state == null) {
 			if (subject.exists()) {
 				state = subject.state();

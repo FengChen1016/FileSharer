@@ -61,6 +61,18 @@ public class CollectionUtils {
 		return res;
 	}
 	
+	public static <T> T find(final Collection<T> collection, final Predicate<T> predicate) {
+		for (final T obj : collection)
+			if (predicate.fit(obj)) return obj;
+		return null;
+	}
+	
+	public static <T> boolean any(final Collection<T> collection, final Predicate<T> predicate) {
+		for (final T obj : collection)
+			if (predicate.fit(obj)) return true;
+		return false;
+	}
+	
 	public static <T> void foreach(Collection<T> col, Closure<T> closure) {
 		if (col == null) return;
 		for (T t : col) {

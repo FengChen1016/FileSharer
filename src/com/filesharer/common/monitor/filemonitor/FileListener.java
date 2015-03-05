@@ -7,17 +7,17 @@ import com.filesharer.common.monitor.Subject;
 public class FileListener implements Listener {
 
 	@Override
-	public void onChange(Subject subject, String changeEvent) {
+	public void onChange(Subject subject, ChangeEvent changeEvent) {
 		
 		System.out.println(((FileSubject)subject).getKey() + " changed. Change event:" + changeEvent);
 		switch (changeEvent) {
-			case ChangeEvent.CREATE: 
+			case CREATE: 
 				onFileCreate((FileSubject)subject);
 				break;
-			case ChangeEvent.DELETE:
+			case DELETE:
 				onFileDelete((FileSubject)subject);
 				break;
-			case ChangeEvent.CHANGE:
+			case CHANGE:
 				onFileChange((FileSubject)subject);
 				break;
 			default:

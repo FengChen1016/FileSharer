@@ -25,6 +25,7 @@ do
 	# if [[ $string == *"some string"* ]]
 	if [[ ${returnCode} -ne 0 ]] 
 	then
+		echo "ping failed!"
 		num=`expr ${num} + 1`
 		echo "${num}/${total} : ${result}" >> $reportFile
 	fi
